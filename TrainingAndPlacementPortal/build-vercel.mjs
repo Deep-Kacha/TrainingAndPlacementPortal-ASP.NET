@@ -264,61 +264,97 @@ function renderAdminJdDetail() {
 }
 
 function enhanceLoginHtml(html, scripts) {
-    const withSubAdminOption = html.replace(
-        '<option value="Admin">Admin</option>',
-        '<option value="Admin">Admin</option>\n                    <option value="SubAdmin">SubAdmin</option>'
-    );
+    const withSubAdminOption = html
+        .replace(
+            '<option value="Admin">Admin</option>',
+            '<option value="Admin">Admin</option>\n                    <option value="SubAdmin">SubAdmin</option>'
+        )
+        .replace(
+            /<!-- Login Card -->\s*<div class="bg-\[#d8cfc2\] p-8 rounded-xl shadow-lg w-full max-w-md">/,
+            `<div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <!-- Login Card -->
+        <div class="lg:col-span-5 bg-[#d8cfc2] p-7 sm:p-8 rounded-xl shadow-lg w-full flex flex-col justify-center">`
+        );
 
-    const demoBox = `
-            <!-- Demo Login Credentials & Quick Access -->
-            <div class="mt-6 pt-5 border-t border-gray-400/50">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-bold uppercase tracking-wider text-gray-800"><i class="fas fa-key text-red-600 mr-1.5"></i>Demo Access (Seed Data)</span>
-                    <span class="text-[10px] font-semibold bg-white/80 text-gray-700 px-2 py-0.5 rounded-full">Resets on Logout</span>
+    const demoPanel = `
+        <!-- Role-Based Demo Access Card -->
+        <div class="lg:col-span-7 bg-white p-6 sm:p-7 rounded-xl shadow-lg w-full border border-gray-200 flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between gap-3 mb-2">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-shield-alt text-[#e7000b] text-base"></i>
+                        <h2 class="text-base sm:text-lg font-bold text-gray-900 m-0">Role-Based Demo Access</h2>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-red-50 text-[#e7000b] border border-red-200 shrink-0">Seed Data</span>
                 </div>
-                <div class="space-y-2 text-xs">
-                    <div class="bg-white/80 rounded-lg p-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border border-gray-300">
+                <p class="text-xs text-gray-600 leading-relaxed mb-4">
+                    Explore every role with preloaded Indian campus seed data. Changes made (add, edit, delete, apply, approve) work live in your session and automatically restore back to defaults when you log out.
+                </p>
+
+                <div class="space-y-3">
+                    <div class="border border-gray-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50/50 hover:border-gray-300 transition">
                         <div class="min-w-0">
-                            <div class="font-bold text-gray-900">Admin (TPO Head)</div>
-                            <div class="text-gray-600 font-mono text-[11px] break-all">admin@rku.ac.in / Admin@123</div>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <span class="font-bold text-sm text-gray-900">Student (Active)</span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">Apply &amp; Track</span>
+                            </div>
+                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">aarav.patel@rku.ac.in · Pass: Student@123</div>
+                            <div class="text-[11px] text-gray-500">Browse open drives, apply to jobs, view interviews &amp; profile</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('Admin', 'admin@rku.ac.in', 'Admin@123')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md font-bold text-[11px] border-none cursor-pointer shrink-0 w-full sm:w-auto">
-                            Demo Login
+                        <button type="button" onclick="demoQuickLogin('Student', 'aarav.patel@rku.ac.in', 'Student@123')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
+                            <i class="fas fa-user-check text-[11px]"></i> Demo Login
                         </button>
                     </div>
-                    <div class="bg-white/80 rounded-lg p-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border border-gray-300">
+
+                    <div class="border border-gray-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50/50 hover:border-gray-300 transition">
                         <div class="min-w-0">
-                            <div class="font-bold text-gray-900">SubAdmin (Prof. Anjali Mehta)</div>
-                            <div class="text-gray-600 font-mono text-[11px] break-all">subadmin@rku.ac.in / SubAdmin@123</div>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <span class="font-bold text-sm text-gray-900">Student (Placed)</span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">Offer History</span>
+                            </div>
+                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">priya.deshmukh@rku.ac.in · Pass: Student@123</div>
+                            <div class="text-[11px] text-gray-500">See verified placement offer &amp; One-Student-One-Job policy</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('SubAdmin', 'subadmin@rku.ac.in', 'SubAdmin@123')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-md font-bold text-[11px] border-none cursor-pointer shrink-0 w-full sm:w-auto">
-                            Demo Login
+                        <button type="button" onclick="demoQuickLogin('Student', 'priya.deshmukh@rku.ac.in', 'Student@123')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
+                            <i class="fas fa-user-check text-[11px]"></i> Demo Login
                         </button>
                     </div>
-                    <div class="bg-white/80 rounded-lg p-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border border-gray-300">
+
+                    <div class="border border-gray-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50/50 hover:border-gray-300 transition">
                         <div class="min-w-0">
-                            <div class="font-bold text-gray-900">Student (Aarav Patel)</div>
-                            <div class="text-gray-600 font-mono text-[11px] break-all">aarav.patel@rku.ac.in / Student@123</div>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <span class="font-bold text-sm text-gray-900">Admin (TPO Head)</span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">Full Control</span>
+                            </div>
+                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">admin@rku.ac.in · Pass: Admin@123</div>
+                            <div class="text-[11px] text-gray-500">Approve students &amp; JDs, manage applications, interviews &amp; users</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('Student', 'aarav.patel@rku.ac.in', 'Student@123')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md font-bold text-[11px] border-none cursor-pointer shrink-0 w-full sm:w-auto">
-                            Demo Login
+                        <button type="button" onclick="demoQuickLogin('Admin', 'admin@rku.ac.in', 'Admin@123')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
+                            <i class="fas fa-user-check text-[11px]"></i> Demo Login
                         </button>
                     </div>
-                    <div class="bg-white/80 rounded-lg p-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border border-gray-300">
+
+                    <div class="border border-gray-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50/50 hover:border-gray-300 transition">
                         <div class="min-w-0">
-                            <div class="font-bold text-gray-900">Placed Student (Priya Deshmukh)</div>
-                            <div class="text-gray-600 font-mono text-[11px] break-all">priya.deshmukh@rku.ac.in / Student@123</div>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <span class="font-bold text-sm text-gray-900">SubAdmin (Coordinator)</span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">Role Scoped</span>
+                            </div>
+                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">subadmin@rku.ac.in · Pass: SubAdmin@123</div>
+                            <div class="text-[11px] text-gray-500">Placement coordinator access (restricted user management)</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('Student', 'priya.deshmukh@rku.ac.in', 'Student@123')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-md font-bold text-[11px] border-none cursor-pointer shrink-0 w-full sm:w-auto">
-                            Demo Login
+                        <button type="button" onclick="demoQuickLogin('SubAdmin', 'subadmin@rku.ac.in', 'SubAdmin@123')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
+                            <i class="fas fa-user-check text-[11px]"></i> Demo Login
                         </button>
                     </div>
                 </div>
-            </div>`;
+            </div>
+        </div>
+    </div>`;
 
     const enhancedHtml = withSubAdminOption.replace(
-        /(<div class="text-center mt-6 text-sm">[\s\S]*?<\/div>)/m,
-        `$1\n${demoBox}`
+        /(<div class="text-center mt-6 text-sm">[\s\S]*?<\/div>\s*<\/div>)/,
+        `$1\n${demoPanel}`
     );
 
     const enhancedScripts = scripts.replace(
@@ -687,7 +723,13 @@ function wrapLayout({ title, bodyHtml, scriptsHtml = '', layoutType = 'root' }) 
     let shellBody = bodyHtml;
 
     if (layoutType === 'auth') {
-        const authHeader = cleanPaths(readView('Shared/_AuthHeader.cshtml'));
+        const authHeader = cleanPaths(readView('Shared/_AuthHeader.cshtml')).replace(
+            '        </div>\r\n    </div>\r\n</header>',
+            '        </div>\n        <a href="/" class="px-3.5 py-1.5 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 no-underline shadow-sm shrink-0">← Home</a>\n    </div>\n</header>'
+        ).replace(
+            '        </div>\n    </div>\n</header>',
+            '        </div>\n        <a href="/" class="px-3.5 py-1.5 text-xs font-semibold text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 no-underline shadow-sm shrink-0">← Home</a>\n    </div>\n</header>'
+        );
         const footer = makeResponsiveFooter(cleanPaths(readView('Shared/_Footer.cshtml')));
         shellBody = `${authHeader}\n${bodyHtml}\n${footer}`;
     } else if (layoutType === 'admin') {
