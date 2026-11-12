@@ -70,29 +70,29 @@ function cleanPaths(html) {
 }
 
 function sanitizePersonalInfo(html) {
-    // Replace ALL existing local DB/View values with fresh Indian feed data for production demo
+    // Replace ALL existing local DB/View values with shared feed data synced with React deployment
     return html
         .replace(/Admin Profile Edit Test/g, 'Admin Profile')
-        .replace(/Dr\. Vishal Doshi/g, 'Dr. Pratiksha Pandya')
-        .replace(/Vishal Doshi/g, 'Dr. Pratiksha Pandya')
-        .replace(/Mr\. Osho Shah/g, 'Prof. Mihir Upadhyay')
-        .replace(/vishal\.doshi@rku\.ac\.in/g, 'tpo.head@rku.ac.in')
-        .replace(/\+91 98765 43210/g, '+91 98254 41001')
-        .replace(/\+91 87654 32109/g, '+91 98254 41002')
-        .replace(/26FGHP579/g, 'RKU-FEED-01')
-        .replace(/Training & Placement Shell/g, 'Training & Placement Cell')
-        .replace(/Office No \.27/g, 'Block C, Room 302')
-        .replace(/>VD</g, '>PP<')
-        .replace(/e\.g\. Shweta Jethwa/g, 'e.g. Rohan Dave')
-        .replace(/e\.g\. Multiicon/g, 'e.g. Crest Data Systems')
-        .replace(/e\.g\. info@multiicon\.in/g, 'e\.g. talent@crestdata-demo.in')
-        .replace(/e\.g\. https:\/\/multiicon\.in/g, 'e\.g. https://www.crestdata.ai')
-        .replace(/e\.g\. hr@multiicon\.in/g, 'e\.g. hr@crestdata-demo.in')
-        .replace(/e\.g\. Rajkot \/ Remote/g, 'e\.g. Ahmedabad / Pune')
-        .replace(/e\.g\. PHP Developer/g, 'e\.g. Full Stack Engineer')
-        .replace(/e\.g\. ₹3\.6 LPA/g, 'e\.g. ₹7.5 LPA')
-        .replace(/e\.g\. ₹10,000/g, 'e\.g. ₹22,000')
-        .replace(/e\.g\. 9876543210/g, 'e\.g. 9726011004');
+        .replace(/Dr\. Vishal Doshi/g, 'Dr. Harshadrai Trivedi')
+        .replace(/Vishal Doshi/g, 'Dr. Harshadrai Trivedi')
+        .replace(/Mr\. Osho Shah/g, 'Prof. Bhavna Solanki')
+        .replace(/vishal\.doshi@rku\.ac\.in/g, 'tpo.director@rku.ac.in')
+        .replace(/\+91 98765 43210/g, '+91 90112 34001')
+        .replace(/\+91 87654 32109/g, '+91 90112 34002')
+        .replace(/26FGHP579/g, 'FEED-TPO-101')
+        .replace(/Training & Placement Shell/g, 'Dean & Chief Placement Officer')
+        .replace(/Office No \.27/g, 'Administrative Annex C, Campus')
+        .replace(/>VD</g, '>HT<')
+        .replace(/e\.g\. Shweta Jethwa/g, 'e.g. Srinidhi Sundaram')
+        .replace(/e\.g\. Multiicon/g, 'e.g. Freshworks India')
+        .replace(/e\.g\. info@multiicon\.in/g, 'e\.g. campus.feed@freshworks-demo.in')
+        .replace(/e\.g\. https:\/\/multiicon\.in/g, 'e\.g. https://www.freshworks.com/company/careers')
+        .replace(/e\.g\. hr@multiicon\.in/g, 'e\.g. campus.feed@freshworks-demo.in')
+        .replace(/e\.g\. Rajkot \/ Remote/g, 'e\.g. Chennai, Tamil Nadu')
+        .replace(/e\.g\. PHP Developer/g, 'e\.g. Product Software Engineer')
+        .replace(/e\.g\. ₹3\.6 LPA/g, 'e\.g. 10.5 LPA')
+        .replace(/e\.g\. ₹10,000/g, 'e\.g. ₹25,000/Month')
+        .replace(/e\.g\. 9876543210/g, 'e\.g. +91 91250 44001');
 }
 
 function makeResponsiveHeader(html) {
@@ -109,8 +109,8 @@ function makeResponsiveHeader(html) {
 
 function makeResponsiveFooter(html) {
     return html
-        .replace(/tpo@rku\.ac\.in/g, 'tpo.head@rku.ac.in')
-        .replace(/\+91 2827 255734/g, '+91 98254 41001')
+        .replace(/tpo@rku\.ac\.in/g, 'placement.desk@rku.ac.in')
+        .replace(/\+91 2827 255734/g, '+91 281 240 0190')
         .replace(
             '<div class="max-w-7xl mx-auto px-8 py-10 grid md:grid-cols-4 gap-8">',
             '<div class="max-w-7xl mx-auto px-5 sm:px-8 py-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">'
@@ -141,14 +141,16 @@ function renderHomeIndex() {
     raw = raw.replace(/@await Html\.PartialAsync\("_Footer"\)/g, makeResponsiveFooter(cleanPaths(readView('Shared/_Footer.cshtml'))));
 
     const feedRecruiters = [
-        { name: 'Tech Mahindra', city: 'Pune / Hyderabad', tag: 'IT Services', color: 'text-red-700' },
-        { name: 'HCLTech', city: 'Noida / Bengaluru', tag: 'Cloud & .NET', color: 'text-blue-700' },
-        { name: 'Capgemini India', city: 'Mumbai / Bengaluru', tag: 'Full Stack', color: 'text-sky-700' },
-        { name: 'Crest Data Systems', city: 'Ahmedabad', tag: 'Python & Cloud', color: 'text-indigo-700' },
-        { name: 'KPIT Technologies', city: 'Pune / Bengaluru', tag: 'Mobility Tech', color: 'text-emerald-700' },
-        { name: 'Mphasis Limited', city: 'Bengaluru / Pune', tag: 'Enterprise AI', color: 'text-purple-700' },
-        { name: 'Cyient Limited', city: 'Hyderabad', tag: 'Digital SaaS', color: 'text-amber-700' },
-        { name: 'Birlasoft', city: 'Pune / Noida', tag: 'ERP & Cloud', color: 'text-teal-700' }
+        { name: 'Freshworks India', city: 'Chennai, Tamil Nadu', tag: 'SaaS & CX', color: 'text-emerald-700' },
+        { name: 'PhonePe Tech Labs', city: 'Bengaluru, Karnataka', tag: 'FinTech & UPI', color: 'text-purple-700' },
+        { name: 'Zerodha Technology', city: 'Bengaluru, Karnataka', tag: 'WealthTech', color: 'text-sky-700' },
+        { name: 'BrowserStack India', city: 'Mumbai, Maharashtra', tag: 'Cloud Testing', color: 'text-orange-700' },
+        { name: 'Postman Engineering', city: 'Bengaluru, Karnataka', tag: 'API Platform', color: 'text-red-700' },
+        { name: 'Meesho Tech', city: 'Bengaluru, Karnataka', tag: 'E-Commerce', color: 'text-pink-700' },
+        { name: 'Tata Elxsi Limited', city: 'Thiruvananthapuram, Kerala', tag: 'Embedded & AI', color: 'text-blue-700' },
+        { name: 'KPIT Technologies', city: 'Pune, Maharashtra', tag: 'Mobility Tech', color: 'text-indigo-700' },
+        { name: 'Happiest Minds Technologies', city: 'Bengaluru, Karnataka', tag: 'Cloud & Digital', color: 'text-teal-700' },
+        { name: 'Coforge Digital', city: 'Noida, Uttar Pradesh', tag: 'Enterprise Data', color: 'text-amber-700' }
     ];
     const doubled = [...feedRecruiters, ...feedRecruiters];
     const marqueeHtml = doubled.map(c => `
@@ -159,10 +161,10 @@ function renderHomeIndex() {
         </div>`).join('');
 
     raw = raw
-        .replace('>850+<', '>940+<')
-        .replace('>92%<', '>94%<')
-        .replace('>120+<', '>145+<')
-        .replace('>12 LPA<', '>₹11.5 LPA<')
+        .replace('>850+<', '>18+<')
+        .replace('>92%<', '>28%<')
+        .replace('>120+<', '>10+<')
+        .replace('>12 LPA<', '>18.5 LPA<')
         .replace(/@foreach \(var img in new\[\] \{[\s\S]*?\}\)\s*\{[\s\S]*?\}/m, marqueeHtml);
 
     raw = cleanPaths(raw)
@@ -314,13 +316,13 @@ function enhanceLoginHtml(html, scripts) {
                     <div class="border border-gray-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50/50 hover:border-gray-300 transition">
                         <div class="min-w-0">
                             <div class="flex flex-wrap items-center gap-2 mb-1">
-                                <span class="font-bold text-sm text-gray-900">Student (Active · Vihaan Chavda)</span>
+                                <span class="font-bold text-sm text-gray-900">Student (Active · Devansh Pandya)</span>
                                 <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">Apply &amp; Track</span>
                             </div>
-                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">vihaan.chavda@rku.ac.in · Pass: FeedStud@2026</div>
+                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">devansh.pandya@rku.ac.in · Pass: Student@123</div>
                             <div class="text-[11px] text-gray-500">Browse open drives, apply to jobs, view interviews &amp; profile</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('Student', 'vihaan.chavda@rku.ac.in', 'FeedStud@2026')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
+                        <button type="button" onclick="demoQuickLogin('Student', 'devansh.pandya@rku.ac.in', 'Student@123')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
                             <i class="fas fa-user-check text-[11px]"></i> Demo Login
                         </button>
                     </div>
@@ -328,13 +330,13 @@ function enhanceLoginHtml(html, scripts) {
                     <div class="border border-gray-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50/50 hover:border-gray-300 transition">
                         <div class="min-w-0">
                             <div class="flex flex-wrap items-center gap-2 mb-1">
-                                <span class="font-bold text-sm text-gray-900">Student (Placed · Niharika Solanki)</span>
+                                <span class="font-bold text-sm text-gray-900">Student (Placed · Moksha Parmar)</span>
                                 <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">Offer History</span>
                             </div>
-                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">niharika.solanki@rku.ac.in · Pass: FeedStud@2026</div>
+                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">moksha.parmar@rku.ac.in · Pass: Student@123</div>
                             <div class="text-[11px] text-gray-500">See verified placement offer &amp; One-Student-One-Job policy</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('Student', 'niharika.solanki@rku.ac.in', 'FeedStud@2026')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
+                        <button type="button" onclick="demoQuickLogin('Student', 'moksha.parmar@rku.ac.in', 'Student@123')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
                             <i class="fas fa-user-check text-[11px]"></i> Demo Login
                         </button>
                     </div>
@@ -342,13 +344,13 @@ function enhanceLoginHtml(html, scripts) {
                     <div class="border border-gray-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50/50 hover:border-gray-300 transition">
                         <div class="min-w-0">
                             <div class="flex flex-wrap items-center gap-2 mb-1">
-                                <span class="font-bold text-sm text-gray-900">Admin (TPO Head · Dr. Pratiksha Pandya)</span>
+                                <span class="font-bold text-sm text-gray-900">Super Admin (TPO · Dr. Harshadrai Trivedi)</span>
                                 <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">Full Control</span>
                             </div>
-                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">tpo.head@rku.ac.in · Pass: DemoAdmin@2026</div>
+                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">tpo.director@rku.ac.in · Pass: Admin@123</div>
                             <div class="text-[11px] text-gray-500">Approve students &amp; JDs, manage applications, interviews &amp; users</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('Admin', 'tpo.head@rku.ac.in', 'DemoAdmin@2026')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
+                        <button type="button" onclick="demoQuickLogin('Admin', 'tpo.director@rku.ac.in', 'Admin@123')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
                             <i class="fas fa-user-check text-[11px]"></i> Demo Login
                         </button>
                     </div>
@@ -356,13 +358,13 @@ function enhanceLoginHtml(html, scripts) {
                     <div class="border border-gray-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50/50 hover:border-gray-300 transition">
                         <div class="min-w-0">
                             <div class="flex flex-wrap items-center gap-2 mb-1">
-                                <span class="font-bold text-sm text-gray-900">SubAdmin (Coordinator · Prof. Mihir Upadhyay)</span>
+                                <span class="font-bold text-sm text-gray-900">Coordinator (Admin · Prof. Bhavna Solanki)</span>
                                 <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">Role Scoped</span>
                             </div>
-                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">tpo.coord@rku.ac.in · Pass: DemoSub@2026</div>
+                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">placement.lead@rku.ac.in · Pass: Admin@123</div>
                             <div class="text-[11px] text-gray-500">Placement coordinator access (restricted user management)</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('SubAdmin', 'tpo.coord@rku.ac.in', 'DemoSub@2026')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
+                        <button type="button" onclick="demoQuickLogin('SubAdmin', 'placement.lead@rku.ac.in', 'Admin@123')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
                             <i class="fas fa-user-check text-[11px]"></i> Demo Login
                         </button>
                     </div>
@@ -415,7 +417,7 @@ function enhanceAdminProfile() {
                 </div>
                 <div>
                     <label class="text-sm">Full Name</label>
-                    <input id="newAdminFullName" type="text" placeholder="e.g. Prof. Kajal Gohil" class="w-full mt-1 p-2 rounded-md bg-white border border-gray-400 outline-none box-border text-sm" />
+                    <input id="newAdminFullName" type="text" placeholder="e.g. Prof. Bhavna Solanki" class="w-full mt-1 p-2 rounded-md bg-white border border-gray-400 outline-none box-border text-sm" />
                 </div>`
         )
         .replace(
@@ -436,7 +438,7 @@ function enhanceAdminProfile() {
                 </div>
                 <div>
                     <label class="text-sm">Full Name</label>
-                    <input id="newAdminFullName" type="text" placeholder="e.g. Prof. Kajal Gohil" class="w-full mt-1 p-2 rounded-md bg-white border border-gray-400 outline-none box-border text-sm" />
+                    <input id="newAdminFullName" type="text" placeholder="e.g. Prof. Bhavna Solanki" class="w-full mt-1 p-2 rounded-md bg-white border border-gray-400 outline-none box-border text-sm" />
                 </div>`
         )
         .replace(
@@ -524,7 +526,7 @@ function enhanceAdminProfile() {
         }
 
         function applyAdminProfileToUi(p) {
-            const initials = (p.fullName || 'PP').split(' ').filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+            const initials = (p.fullName || 'HT').split(' ').filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase();
             document.getElementById('adminInitialsDisplay').textContent = initials;
             document.getElementById('adminNameDisplay').textContent = p.fullName;
             document.getElementById('adminNameInput').value = p.fullName;

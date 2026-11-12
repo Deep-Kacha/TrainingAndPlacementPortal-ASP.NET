@@ -6,7 +6,7 @@
 (function () {
     const STORAGE_KEY = 'tp_demo_db';
     const SEED_VERSION_KEY = 'tp_demo_seed_version';
-    const SEED_VERSION = 'feed-v2-2026';
+    const SEED_VERSION = 'feed-v3-react-sync-2026';
     const nativeFetch = window.fetch.bind(window);
 
     function cloneSeed() {
@@ -111,11 +111,11 @@
         const isPrimaryAdmin = user.id === 1;
         return {
             fullName: isPrimaryAdmin ? (fallback.fullName || user.fullName) : (user.fullName || 'T&P Coordinator'),
-            roleTitle: isPrimaryAdmin ? (fallback.roleTitle || user.roleTitle || 'TPO Head') : (user.roleTitle || 'SubAdmin (T&P Coordinator)'),
-            employeeId: isPrimaryAdmin ? (fallback.employeeId || user.employeeId || 'RKU-FEED-01') : (user.employeeId || `RKU-FEED-${String(user.id).padStart(2, '0')}`),
-            department: isPrimaryAdmin ? (fallback.department || user.department || 'Training & Placement Cell') : (user.department || 'Training & Placement Cell'),
-            officeLocation: isPrimaryAdmin ? (fallback.officeLocation || user.officeLocation || 'Block C, Room 302') : (user.officeLocation || 'Block C, T&P Wing'),
-            mobileNumber: isPrimaryAdmin ? (fallback.mobileNumber || user.mobileNumber || '+91 98254 41001') : (user.mobileNumber || '+91 98254 41002'),
+            roleTitle: isPrimaryAdmin ? (fallback.roleTitle || user.roleTitle || 'Dean & Chief Placement Officer') : (user.roleTitle || 'SubAdmin (Senior Placement Coordinator)'),
+            employeeId: isPrimaryAdmin ? (fallback.employeeId || user.employeeId || 'FEED-TPO-101') : (user.employeeId || `FEED-TPO-${100 + user.id}`),
+            department: isPrimaryAdmin ? (fallback.department || user.department || 'Dean & Chief Placement Officer') : (user.department || 'Senior Placement Coordinator'),
+            officeLocation: isPrimaryAdmin ? (fallback.officeLocation || user.officeLocation || 'Administrative Annex C, Campus') : (user.officeLocation || 'Administrative Annex C, Campus'),
+            mobileNumber: isPrimaryAdmin ? (fallback.mobileNumber || user.mobileNumber || '+91 90112 34001') : (user.mobileNumber || '+91 90112 34002'),
             email: isPrimaryAdmin ? (fallback.email || user.email) : user.email,
             accountRole: user.role
         };
@@ -146,7 +146,7 @@
             }
 
             const db = getDb();
-            const user = db.users.find(u => u.email.toLowerCase() === email && u.role === role);
+            const user = db.users.find(u => u.email.toLowerCase() === email && (u.role === role || (role === 'Admin' && u.role === 'SubAdmin')));
             if (!user || user.password !== password) {
                 return jsonResponse({ success: false, message: 'Invalid email or password.' }, 401);
             }
@@ -391,11 +391,11 @@
                 const body = await readJsonBody(options);
                 const updated = {
                     fullName: body.fullName || user.fullName || db.adminProfile.fullName,
-                    roleTitle: body.roleTitle || user.roleTitle || (user.role === 'SubAdmin' ? 'SubAdmin (T&P Coordinator)' : 'TPO Head'),
-                    employeeId: body.employeeId || user.employeeId || 'RKU-FEED-01',
-                    department: body.department || user.department || 'Training & Placement Cell',
-                    officeLocation: body.officeLocation || user.officeLocation || 'Block C, Room 302',
-                    mobileNumber: body.mobileNumber || user.mobileNumber || '+91 98254 41001',
+                    roleTitle: body.roleTitle || user.roleTitle || (user.role === 'SubAdmin' ? 'SubAdmin (Senior Placement Coordinator)' : 'Dean & Chief Placement Officer'),
+                    employeeId: body.employeeId || user.employeeId || 'FEED-TPO-101',
+                    department: body.department || user.department || 'Dean & Chief Placement Officer',
+                    officeLocation: body.officeLocation || user.officeLocation || 'Administrative Annex C, Campus',
+                    mobileNumber: body.mobileNumber || user.mobileNumber || '+91 90112 34001',
                     email: body.email || user.email
                 };
                 Object.assign(user, updated);
@@ -424,8 +424,8 @@
                     email: u.email,
                     fullName: u.id === 1 ? (db.adminProfile.fullName || u.fullName) : u.fullName,
                     role: u.role,
-                    roleTitle: u.roleTitle || (u.role === 'SubAdmin' ? 'SubAdmin (T&P Coordinator)' : 'TPO Head'),
-                    department: u.department || 'Training & Placement Cell',
+                    roleTitle: u.roleTitle || (u.role === 'SubAdmin' ? 'SubAdmin (Senior Placement Coordinator)' : 'Dean & Chief Placement Officer'),
+                    department: u.department || 'Dean & Chief Placement Officer',
                     isApproved: u.isApproved,
                     isSelf: u.id === user.id,
                     createdAt: u.createdAt
@@ -462,11 +462,11 @@
                 password: body.password,
                 role: requestedRole,
                 fullName,
-                roleTitle: requestedRole === 'SubAdmin' ? 'SubAdmin (T&P Coordinator)' : 'Placement Administrator',
-                employeeId: `RKU-FEED-${String(newId).padStart(2, '0')}`,
+                roleTitle: requestedRole === 'SubAdmin' ? 'SubAdmin (Senior Placement Coordinator)' : 'Placement Administrator',
+                employeeId: `FEED-TPO-${100 + newId}`,
                 department: (body.department || '').trim() || 'Training & Placement Cell',
-                officeLocation: 'Block C, T&P Wing',
-                mobileNumber: `+91 98254 41${String(newId).padStart(3, '0')}`,
+                officeLocation: 'Administrative Annex C, Campus',
+                mobileNumber: `+91 90112 ${String(34000 + newId).padStart(5, '0')}`,
                 isApproved: true,
                 createdAt: new Date().toISOString()
             });
