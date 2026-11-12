@@ -70,28 +70,29 @@ function cleanPaths(html) {
 }
 
 function sanitizePersonalInfo(html) {
-    // Replace any personal/test strings with Indian seed data for production demo
+    // Replace ALL existing local DB/View values with fresh Indian feed data for production demo
     return html
         .replace(/Admin Profile Edit Test/g, 'Admin Profile')
-        .replace(/Dr\. Vishal Doshi/g, 'Dr. Rajesh Kulkarni')
-        .replace(/Vishal Doshi/g, 'Dr. Rajesh Kulkarni')
-        .replace(/Mr\. Osho Shah/g, 'Prof. Anjali Mehta')
-        .replace(/vishal\.doshi@rku\.ac\.in/g, 'admin@rku.ac.in')
-        .replace(/\+91 98765 43210/g, '+91 98250 11001')
-        .replace(/\+91 87654 32109/g, '+91 98250 11002')
-        .replace(/26FGHP579/g, 'RKU-TPO-101')
+        .replace(/Dr\. Vishal Doshi/g, 'Dr. Pratiksha Pandya')
+        .replace(/Vishal Doshi/g, 'Dr. Pratiksha Pandya')
+        .replace(/Mr\. Osho Shah/g, 'Prof. Mihir Upadhyay')
+        .replace(/vishal\.doshi@rku\.ac\.in/g, 'tpo.head@rku.ac.in')
+        .replace(/\+91 98765 43210/g, '+91 98254 41001')
+        .replace(/\+91 87654 32109/g, '+91 98254 41002')
+        .replace(/26FGHP579/g, 'RKU-FEED-01')
         .replace(/Training & Placement Shell/g, 'Training & Placement Cell')
-        .replace(/Office No \.27/g, 'Block A, Room 104')
-        .replace(/>VD</g, '>RK<')
-        .replace(/e\.g\. Shweta Jethwa/g, 'e.g. Siddharth Rao')
-        .replace(/e\.g\. Multiicon/g, 'e.g. Tata Consultancy Services')
-        .replace(/e\.g\. info@multiicon\.in/g, 'e.g. campus@tcs-demo.in')
-        .replace(/e\.g\. https:\/\/multiicon\.in/g, 'e.g. https://www.tcs.com')
-        .replace(/e\.g\. hr@multiicon\.in/g, 'e.g. hr@tcs-demo.in')
-        .replace(/e\.g\. Rajkot \/ Remote/g, 'e.g. Ahmedabad / Pune')
-        .replace(/e\.g\. PHP Developer/g, 'e.g. Software Engineer')
-        .replace(/e\.g\. ₹3\.6 LPA/g, 'e.g. ₹7.0 LPA')
-        .replace(/e\.g\. 9876543210/g, 'e.g. 9825011223');
+        .replace(/Office No \.27/g, 'Block C, Room 302')
+        .replace(/>VD</g, '>PP<')
+        .replace(/e\.g\. Shweta Jethwa/g, 'e.g. Rohan Dave')
+        .replace(/e\.g\. Multiicon/g, 'e.g. Crest Data Systems')
+        .replace(/e\.g\. info@multiicon\.in/g, 'e\.g. talent@crestdata-demo.in')
+        .replace(/e\.g\. https:\/\/multiicon\.in/g, 'e\.g. https://www.crestdata.ai')
+        .replace(/e\.g\. hr@multiicon\.in/g, 'e\.g. hr@crestdata-demo.in')
+        .replace(/e\.g\. Rajkot \/ Remote/g, 'e\.g. Ahmedabad / Pune')
+        .replace(/e\.g\. PHP Developer/g, 'e\.g. Full Stack Engineer')
+        .replace(/e\.g\. ₹3\.6 LPA/g, 'e\.g. ₹7.5 LPA')
+        .replace(/e\.g\. ₹10,000/g, 'e\.g. ₹22,000')
+        .replace(/e\.g\. 9876543210/g, 'e\.g. 9726011004');
 }
 
 function makeResponsiveHeader(html) {
@@ -108,6 +109,8 @@ function makeResponsiveHeader(html) {
 
 function makeResponsiveFooter(html) {
     return html
+        .replace(/tpo@rku\.ac\.in/g, 'tpo.head@rku.ac.in')
+        .replace(/\+91 2827 255734/g, '+91 98254 41001')
         .replace(
             '<div class="max-w-7xl mx-auto px-8 py-10 grid md:grid-cols-4 gap-8">',
             '<div class="max-w-7xl mx-auto px-5 sm:px-8 py-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">'
@@ -137,14 +140,30 @@ function renderHomeIndex() {
     raw = raw.replace(/@await Html\.PartialAsync\("_Header"\)/g, makeResponsiveHeader(cleanPaths(readView('Shared/_Header.cshtml'))));
     raw = raw.replace(/@await Html\.PartialAsync\("_Footer"\)/g, makeResponsiveFooter(cleanPaths(readView('Shared/_Footer.cshtml'))));
 
-    const imgs = ['gateway.jpg', 'multiicon.jpg', 'qtonz.png', 'rkit.jpg', 'infinity.jpg', 'tcs.jpg', 'rtcamp.png'];
-    const doubled = [...imgs, ...imgs];
-    const marqueeHtml = doubled.map(img => `
-        <div class="bg-[#d8d1c7] flex items-center justify-center rounded-lg shadow-md px-8 sm:px-16 md:px-[6.25rem] py-12 sm:py-16 md:py-20 min-w-[150px] sm:min-w-[200px] h-[88px] sm:h-[100px]">
-            <img src="/images/${img}" alt="company" class="max-h-16 sm:max-h-[7.5rem] object-contain" />
+    const feedRecruiters = [
+        { name: 'Tech Mahindra', city: 'Pune / Hyderabad', tag: 'IT Services', color: 'text-red-700' },
+        { name: 'HCLTech', city: 'Noida / Bengaluru', tag: 'Cloud & .NET', color: 'text-blue-700' },
+        { name: 'Capgemini India', city: 'Mumbai / Bengaluru', tag: 'Full Stack', color: 'text-sky-700' },
+        { name: 'Crest Data Systems', city: 'Ahmedabad', tag: 'Python & Cloud', color: 'text-indigo-700' },
+        { name: 'KPIT Technologies', city: 'Pune / Bengaluru', tag: 'Mobility Tech', color: 'text-emerald-700' },
+        { name: 'Mphasis Limited', city: 'Bengaluru / Pune', tag: 'Enterprise AI', color: 'text-purple-700' },
+        { name: 'Cyient Limited', city: 'Hyderabad', tag: 'Digital SaaS', color: 'text-amber-700' },
+        { name: 'Birlasoft', city: 'Pune / Noida', tag: 'ERP & Cloud', color: 'text-teal-700' }
+    ];
+    const doubled = [...feedRecruiters, ...feedRecruiters];
+    const marqueeHtml = doubled.map(c => `
+        <div class="bg-[#d8d1c7] flex flex-col items-center justify-center rounded-xl shadow-md px-6 sm:px-10 py-5 min-w-[180px] sm:min-w-[220px] h-[96px] sm:h-[110px] border border-[#c4b5a6] text-center">
+            <span class="font-extrabold text-sm sm:text-base ${c.color} tracking-tight">${c.name}</span>
+            <span class="text-[11px] font-semibold text-gray-700 mt-1">${c.tag}</span>
+            <span class="text-[10px] text-gray-500 mt-0.5">${c.city}</span>
         </div>`).join('');
 
-    raw = raw.replace(/@foreach \(var img in new\[\] \{[\s\S]*?\}\)\s*\{[\s\S]*?\}/m, marqueeHtml);
+    raw = raw
+        .replace('>850+<', '>940+<')
+        .replace('>92%<', '>94%<')
+        .replace('>120+<', '>145+<')
+        .replace('>12 LPA<', '>₹11.5 LPA<')
+        .replace(/@foreach \(var img in new\[\] \{[\s\S]*?\}\)\s*\{[\s\S]*?\}/m, marqueeHtml);
 
     raw = cleanPaths(raw)
         .replace(
@@ -295,13 +314,13 @@ function enhanceLoginHtml(html, scripts) {
                     <div class="border border-gray-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50/50 hover:border-gray-300 transition">
                         <div class="min-w-0">
                             <div class="flex flex-wrap items-center gap-2 mb-1">
-                                <span class="font-bold text-sm text-gray-900">Student (Active)</span>
+                                <span class="font-bold text-sm text-gray-900">Student (Active · Vihaan Chavda)</span>
                                 <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">Apply &amp; Track</span>
                             </div>
-                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">aarav.patel@rku.ac.in · Pass: Student@123</div>
+                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">vihaan.chavda@rku.ac.in · Pass: FeedStud@2026</div>
                             <div class="text-[11px] text-gray-500">Browse open drives, apply to jobs, view interviews &amp; profile</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('Student', 'aarav.patel@rku.ac.in', 'Student@123')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
+                        <button type="button" onclick="demoQuickLogin('Student', 'vihaan.chavda@rku.ac.in', 'FeedStud@2026')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
                             <i class="fas fa-user-check text-[11px]"></i> Demo Login
                         </button>
                     </div>
@@ -309,13 +328,13 @@ function enhanceLoginHtml(html, scripts) {
                     <div class="border border-gray-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50/50 hover:border-gray-300 transition">
                         <div class="min-w-0">
                             <div class="flex flex-wrap items-center gap-2 mb-1">
-                                <span class="font-bold text-sm text-gray-900">Student (Placed)</span>
+                                <span class="font-bold text-sm text-gray-900">Student (Placed · Niharika Solanki)</span>
                                 <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">Offer History</span>
                             </div>
-                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">priya.deshmukh@rku.ac.in · Pass: Student@123</div>
+                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">niharika.solanki@rku.ac.in · Pass: FeedStud@2026</div>
                             <div class="text-[11px] text-gray-500">See verified placement offer &amp; One-Student-One-Job policy</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('Student', 'priya.deshmukh@rku.ac.in', 'Student@123')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
+                        <button type="button" onclick="demoQuickLogin('Student', 'niharika.solanki@rku.ac.in', 'FeedStud@2026')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
                             <i class="fas fa-user-check text-[11px]"></i> Demo Login
                         </button>
                     </div>
@@ -323,13 +342,13 @@ function enhanceLoginHtml(html, scripts) {
                     <div class="border border-gray-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50/50 hover:border-gray-300 transition">
                         <div class="min-w-0">
                             <div class="flex flex-wrap items-center gap-2 mb-1">
-                                <span class="font-bold text-sm text-gray-900">Admin (TPO Head)</span>
+                                <span class="font-bold text-sm text-gray-900">Admin (TPO Head · Dr. Pratiksha Pandya)</span>
                                 <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">Full Control</span>
                             </div>
-                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">admin@rku.ac.in · Pass: Admin@123</div>
+                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">tpo.head@rku.ac.in · Pass: DemoAdmin@2026</div>
                             <div class="text-[11px] text-gray-500">Approve students &amp; JDs, manage applications, interviews &amp; users</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('Admin', 'admin@rku.ac.in', 'Admin@123')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
+                        <button type="button" onclick="demoQuickLogin('Admin', 'tpo.head@rku.ac.in', 'DemoAdmin@2026')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
                             <i class="fas fa-user-check text-[11px]"></i> Demo Login
                         </button>
                     </div>
@@ -337,13 +356,13 @@ function enhanceLoginHtml(html, scripts) {
                     <div class="border border-gray-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50/50 hover:border-gray-300 transition">
                         <div class="min-w-0">
                             <div class="flex flex-wrap items-center gap-2 mb-1">
-                                <span class="font-bold text-sm text-gray-900">SubAdmin (Coordinator)</span>
+                                <span class="font-bold text-sm text-gray-900">SubAdmin (Coordinator · Prof. Mihir Upadhyay)</span>
                                 <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">Role Scoped</span>
                             </div>
-                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">subadmin@rku.ac.in · Pass: SubAdmin@123</div>
+                            <div class="text-[11px] font-mono text-gray-700 break-all mb-1">tpo.coord@rku.ac.in · Pass: DemoSub@2026</div>
                             <div class="text-[11px] text-gray-500">Placement coordinator access (restricted user management)</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('SubAdmin', 'subadmin@rku.ac.in', 'SubAdmin@123')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
+                        <button type="button" onclick="demoQuickLogin('SubAdmin', 'tpo.coord@rku.ac.in', 'DemoSub@2026')" class="bg-[#dc2626] hover:bg-red-700 text-white px-3.5 py-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1.5 shrink-0 border-none cursor-pointer shadow-sm w-full sm:w-auto">
                             <i class="fas fa-user-check text-[11px]"></i> Demo Login
                         </button>
                     </div>
@@ -396,7 +415,7 @@ function enhanceAdminProfile() {
                 </div>
                 <div>
                     <label class="text-sm">Full Name</label>
-                    <input id="newAdminFullName" type="text" placeholder="e.g. Prof. Karan Joshi" class="w-full mt-1 p-2 rounded-md bg-white border border-gray-400 outline-none box-border text-sm" />
+                    <input id="newAdminFullName" type="text" placeholder="e.g. Prof. Kajal Gohil" class="w-full mt-1 p-2 rounded-md bg-white border border-gray-400 outline-none box-border text-sm" />
                 </div>`
         )
         .replace(
@@ -417,7 +436,7 @@ function enhanceAdminProfile() {
                 </div>
                 <div>
                     <label class="text-sm">Full Name</label>
-                    <input id="newAdminFullName" type="text" placeholder="e.g. Prof. Karan Joshi" class="w-full mt-1 p-2 rounded-md bg-white border border-gray-400 outline-none box-border text-sm" />
+                    <input id="newAdminFullName" type="text" placeholder="e.g. Prof. Kajal Gohil" class="w-full mt-1 p-2 rounded-md bg-white border border-gray-400 outline-none box-border text-sm" />
                 </div>`
         )
         .replace(
@@ -505,7 +524,7 @@ function enhanceAdminProfile() {
         }
 
         function applyAdminProfileToUi(p) {
-            const initials = (p.fullName || 'RK').split(' ').filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+            const initials = (p.fullName || 'PP').split(' ').filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase();
             document.getElementById('adminInitialsDisplay').textContent = initials;
             document.getElementById('adminNameDisplay').textContent = p.fullName;
             document.getElementById('adminNameInput').value = p.fullName;
@@ -808,7 +827,13 @@ cleanDir(outDir);
 copyDirRecursive(path.join(wwwrootDir, 'css'), path.join(outDir, 'css'));
 const responsiveCss = fs.readFileSync(path.join(srcDir, 'responsive.css'), 'utf8');
 fs.appendFileSync(path.join(outDir, 'css', 'site.css'), '\n' + responsiveCss, 'utf8');
-copyDirRecursive(path.join(wwwrootDir, 'images'), path.join(outDir, 'images'));
+ensureDir(path.join(outDir, 'images'));
+for (const asset of ['about.png', 'hero.jpg', 'logo.png']) {
+    const srcImg = path.join(wwwrootDir, 'images', asset);
+    if (fs.existsSync(srcImg)) {
+        fs.copyFileSync(srcImg, path.join(outDir, 'images', asset));
+    }
+}
 
 // 2. Copy demo-seed.js and demo-api.js
 ensureDir(path.join(outDir, 'js'));

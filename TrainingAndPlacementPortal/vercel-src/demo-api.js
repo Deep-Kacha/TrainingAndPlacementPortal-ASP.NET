@@ -5,6 +5,8 @@
 
 (function () {
     const STORAGE_KEY = 'tp_demo_db';
+    const SEED_VERSION_KEY = 'tp_demo_seed_version';
+    const SEED_VERSION = 'feed-v2-2026';
     const nativeFetch = window.fetch.bind(window);
 
     function cloneSeed() {
@@ -13,8 +15,9 @@
 
     function getDb() {
         try {
+            const ver = sessionStorage.getItem(SEED_VERSION_KEY);
             const raw = sessionStorage.getItem(STORAGE_KEY);
-            if (raw) {
+            if (raw && ver === SEED_VERSION) {
                 return JSON.parse(raw);
             }
         } catch (e) {
@@ -27,6 +30,7 @@
 
     function saveDb(db) {
         try {
+            sessionStorage.setItem(SEED_VERSION_KEY, SEED_VERSION);
             sessionStorage.setItem(STORAGE_KEY, JSON.stringify(db));
         } catch (e) {
             console.warn('Unable to persist demo DB in sessionStorage.', e);
@@ -36,6 +40,7 @@
     window.resetDemoDb = function () {
         try {
             sessionStorage.removeItem(STORAGE_KEY);
+            sessionStorage.removeItem(SEED_VERSION_KEY);
         } catch (e) {}
     };
 
@@ -107,10 +112,10 @@
         return {
             fullName: isPrimaryAdmin ? (fallback.fullName || user.fullName) : (user.fullName || 'T&P Coordinator'),
             roleTitle: isPrimaryAdmin ? (fallback.roleTitle || user.roleTitle || 'TPO Head') : (user.roleTitle || 'SubAdmin (T&P Coordinator)'),
-            employeeId: isPrimaryAdmin ? (fallback.employeeId || user.employeeId || 'RKU-TPO-101') : (user.employeeId || `RKU-TPO-${100 + user.id}`),
+            employeeId: isPrimaryAdmin ? (fallback.employeeId || user.employeeId || 'RKU-FEED-01') : (user.employeeId || `RKU-FEED-${String(user.id).padStart(2, '0')}`),
             department: isPrimaryAdmin ? (fallback.department || user.department || 'Training & Placement Cell') : (user.department || 'Training & Placement Cell'),
-            officeLocation: isPrimaryAdmin ? (fallback.officeLocation || user.officeLocation || 'Block A, Room 104') : (user.officeLocation || 'Block A, T&P Wing'),
-            mobileNumber: isPrimaryAdmin ? (fallback.mobileNumber || user.mobileNumber || '+91 98250 11001') : (user.mobileNumber || '+91 98250 11002'),
+            officeLocation: isPrimaryAdmin ? (fallback.officeLocation || user.officeLocation || 'Block C, Room 302') : (user.officeLocation || 'Block C, T&P Wing'),
+            mobileNumber: isPrimaryAdmin ? (fallback.mobileNumber || user.mobileNumber || '+91 98254 41001') : (user.mobileNumber || '+91 98254 41002'),
             email: isPrimaryAdmin ? (fallback.email || user.email) : user.email,
             accountRole: user.role
         };
@@ -387,10 +392,10 @@
                 const updated = {
                     fullName: body.fullName || user.fullName || db.adminProfile.fullName,
                     roleTitle: body.roleTitle || user.roleTitle || (user.role === 'SubAdmin' ? 'SubAdmin (T&P Coordinator)' : 'TPO Head'),
-                    employeeId: body.employeeId || user.employeeId || 'RKU-TPO-101',
+                    employeeId: body.employeeId || user.employeeId || 'RKU-FEED-01',
                     department: body.department || user.department || 'Training & Placement Cell',
-                    officeLocation: body.officeLocation || user.officeLocation || 'Block A, Room 104',
-                    mobileNumber: body.mobileNumber || user.mobileNumber || '+91 98250 11001',
+                    officeLocation: body.officeLocation || user.officeLocation || 'Block C, Room 302',
+                    mobileNumber: body.mobileNumber || user.mobileNumber || '+91 98254 41001',
                     email: body.email || user.email
                 };
                 Object.assign(user, updated);
@@ -458,10 +463,10 @@
                 role: requestedRole,
                 fullName,
                 roleTitle: requestedRole === 'SubAdmin' ? 'SubAdmin (T&P Coordinator)' : 'Placement Administrator',
-                employeeId: `RKU-TPO-${100 + newId}`,
+                employeeId: `RKU-FEED-${String(newId).padStart(2, '0')}`,
                 department: (body.department || '').trim() || 'Training & Placement Cell',
-                officeLocation: 'Block A, T&P Wing',
-                mobileNumber: `+91 98250 11${String(newId).padStart(3, '0')}`,
+                officeLocation: 'Block C, T&P Wing',
+                mobileNumber: `+91 98254 41${String(newId).padStart(3, '0')}`,
                 isApproved: true,
                 createdAt: new Date().toISOString()
             });
