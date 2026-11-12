@@ -1,0 +1,70 @@
+/* ===== Responsive Enhancements for Desktop, Tablet & Mobile ===== */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+img, svg, video, canvas {
+    max-width: 100%;
+}
+
+/* Smooth horizontal scrolling for wide data tables/lists */
+.overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+}
+
+/* Modal viewport safety on short/mobile screens */
+#demoDocModal > div,
+#demoRazorpayModal > div {
+    max-height: 92vh;
+    overflow-y: auto;
+}
+
+/* Prevent flex/grid children inside main panel from blowing out 100vw on tablets/laptops */
+main {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* Mobile & small phone adjustments (< 640px) */
+@media (max-width: 639px) {
+    .page-title {
+        font-size: 1.5rem;
+        line-height: 1.25;
+    }
+
+    .page-subtitle {
+        font-size: 0.875rem;
+    }
+
+    .page-header {
+        margin-bottom: 1.25rem;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .page-container {
+        padding: 1rem;
+    }
+
+    .card-basic,
+    .card-dashboard,
+    .card-action {
+        padding: 1rem;
+    }
+}
+
+/* Large / ultrawide desktop polish */
+@media (min-width: 1536px) {
+    main > div {
+        max-width: 1440px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

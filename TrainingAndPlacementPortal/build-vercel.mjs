@@ -94,29 +94,101 @@ function sanitizePersonalInfo(html) {
         .replace(/e\.g\. 9876543210/g, 'e.g. 9825011223');
 }
 
+function makeResponsiveHeader(html) {
+    return html
+        .replace(
+            '<button class="md:hidden text-2xl" onclick="toggleMobileMenu()">☰</button>',
+            '<button type="button" aria-label="Toggle Menu" class="md:hidden text-2xl p-2 bg-transparent border-none cursor-pointer text-gray-800" onclick="toggleMobileMenu()">☰</button>'
+        )
+        .replace(
+            '<img src="/images/logo.png" alt="RK University" class="h-14" />',
+            '<img src="/images/logo.png" alt="RK University" class="h-10 sm:h-14" />'
+        );
+}
+
+function makeResponsiveFooter(html) {
+    return html
+        .replace(
+            '<div class="max-w-7xl mx-auto px-8 py-10 grid md:grid-cols-4 gap-8">',
+            '<div class="max-w-7xl mx-auto px-5 sm:px-8 py-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">'
+        )
+        .replace(
+            '<div class="border-t border-gray-400 text-sm py-4 px-8 flex justify-between">',
+            '<div class="border-t border-gray-400 text-sm py-4 px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">'
+        );
+}
+
 function renderSidebar(partialPath) {
     let raw = readView(partialPath);
     // Remove Razor @{ ... } block and @GetActiveClass("...") calls; site.js applies active state cleanly
     raw = raw.replace(/@\{[\s\S]*?\}/g, '');
     raw = raw.replace(/@GetActiveClass\("[^"]*"\)/g, '');
-    return cleanPaths(raw).trim();
+    return cleanPaths(raw)
+        .replace(
+            '<button class="text-2xl md:hidden" onclick="toggleSidebar()">',
+            '<button type="button" aria-label="Toggle Sidebar" class="text-2xl md:hidden p-2 bg-transparent border-none cursor-pointer text-gray-800 rounded-md hover:bg-black/5" onclick="toggleSidebar()">'
+        )
+        .trim();
 }
 
 function renderHomeIndex() {
     let raw = readView('Home/Index.cshtml');
     raw = stripRazorHeader(raw);
-    raw = raw.replace(/@await Html\.PartialAsync\("_Header"\)/g, cleanPaths(readView('Shared/_Header.cshtml')));
-    raw = raw.replace(/@await Html\.PartialAsync\("_Footer"\)/g, cleanPaths(readView('Shared/_Footer.cshtml')));
+    raw = raw.replace(/@await Html\.PartialAsync\("_Header"\)/g, makeResponsiveHeader(cleanPaths(readView('Shared/_Header.cshtml'))));
+    raw = raw.replace(/@await Html\.PartialAsync\("_Footer"\)/g, makeResponsiveFooter(cleanPaths(readView('Shared/_Footer.cshtml'))));
 
     const imgs = ['gateway.jpg', 'multiicon.jpg', 'qtonz.png', 'rkit.jpg', 'infinity.jpg', 'tcs.jpg', 'rtcamp.png'];
     const doubled = [...imgs, ...imgs];
     const marqueeHtml = doubled.map(img => `
-        <div class="bg-[#d8d1c7] flex items-center justify-center rounded-lg shadow-md px-[6.25rem] py-20 min-w-[200px] h-[100px]">
-            <img src="/images/${img}" alt="company" class="max-h-[7.5rem] object-contain" />
+        <div class="bg-[#d8d1c7] flex items-center justify-center rounded-lg shadow-md px-8 sm:px-16 md:px-[6.25rem] py-12 sm:py-16 md:py-20 min-w-[150px] sm:min-w-[200px] h-[88px] sm:h-[100px]">
+            <img src="/images/${img}" alt="company" class="max-h-16 sm:max-h-[7.5rem] object-contain" />
         </div>`).join('');
 
     raw = raw.replace(/@foreach \(var img in new\[\] \{[\s\S]*?\}\)\s*\{[\s\S]*?\}/m, marqueeHtml);
-    return cleanPaths(raw);
+
+    raw = cleanPaths(raw)
+        .replace(
+            'class="relative max-w-7xl px-8 lg:px-16 py-[11.25rem]"',
+            'class="relative max-w-7xl px-5 sm:px-8 lg:px-16 py-20 sm:py-28 md:py-36 lg:py-[11.25rem]"'
+        )
+        .replace(
+            'class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight"',
+            'class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-tight"'
+        )
+        .replace(
+            '<section id="placements" class="py-20 bg-gray-100">',
+            '<section id="placements" class="py-12 md:py-20 px-4 sm:px-6 bg-gray-100">'
+        )
+        .replace(
+            '<div class="max-w-6xl mx-auto grid md:grid-cols-4 gap-10">',
+            '<div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-8">'
+        )
+        .replace(
+            '<div class="mt-12 bg-gradient-to-r from-red-800 to-red-600 rounded-xl shadow-lg p-10 text-white">',
+            '<div class="mt-10 md:mt-12 bg-gradient-to-r from-red-800 to-red-600 rounded-xl shadow-lg p-6 sm:p-8 md:p-10 text-white">'
+        )
+        .replace(
+            '<div class="grid md:grid-cols-4 gap-8 text-center">',
+            '<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center">'
+        )
+        .replace(
+            '<div class="flex animate-scroll gap-20 w-max px-20">',
+            '<div class="flex animate-scroll gap-6 sm:gap-12 md:gap-20 w-max px-4 sm:px-10 md:px-20">'
+        )
+        .replace(
+            '<section id="about" class="bg-gray-100 py-24 px-6">',
+            '<section id="about" class="bg-gray-100 py-14 md:py-24 px-4 sm:px-6">'
+        )
+        .replace(
+            '<div class="grid md:grid-cols-2 gap-16 items-center">',
+            '<div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">'
+        )
+        .replace(
+            'class="w-full h-[320px] object-cover rounded-xl shadow-lg"',
+            'class="w-full h-56 sm:h-72 md:h-[320px] object-cover rounded-xl shadow-lg"'
+        );
+
+    return raw;
 }
 
 function renderAdminDashboard() {
@@ -205,39 +277,39 @@ function enhanceLoginHtml(html, scripts) {
                     <span class="text-[10px] font-semibold bg-white/80 text-gray-700 px-2 py-0.5 rounded-full">Resets on Logout</span>
                 </div>
                 <div class="space-y-2 text-xs">
-                    <div class="bg-white/80 rounded-lg p-2.5 flex items-center justify-between gap-2 border border-gray-300">
-                        <div>
+                    <div class="bg-white/80 rounded-lg p-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border border-gray-300">
+                        <div class="min-w-0">
                             <div class="font-bold text-gray-900">Admin (TPO Head)</div>
-                            <div class="text-gray-600 font-mono text-[11px]">admin@rku.ac.in / Admin@123</div>
+                            <div class="text-gray-600 font-mono text-[11px] break-all">admin@rku.ac.in / Admin@123</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('Admin', 'admin@rku.ac.in', 'Admin@123')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md font-bold text-[11px] border-none cursor-pointer shrink-0">
+                        <button type="button" onclick="demoQuickLogin('Admin', 'admin@rku.ac.in', 'Admin@123')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md font-bold text-[11px] border-none cursor-pointer shrink-0 w-full sm:w-auto">
                             Demo Login
                         </button>
                     </div>
-                    <div class="bg-white/80 rounded-lg p-2.5 flex items-center justify-between gap-2 border border-gray-300">
-                        <div>
+                    <div class="bg-white/80 rounded-lg p-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border border-gray-300">
+                        <div class="min-w-0">
                             <div class="font-bold text-gray-900">SubAdmin (Prof. Anjali Mehta)</div>
-                            <div class="text-gray-600 font-mono text-[11px]">subadmin@rku.ac.in / SubAdmin@123</div>
+                            <div class="text-gray-600 font-mono text-[11px] break-all">subadmin@rku.ac.in / SubAdmin@123</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('SubAdmin', 'subadmin@rku.ac.in', 'SubAdmin@123')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-md font-bold text-[11px] border-none cursor-pointer shrink-0">
+                        <button type="button" onclick="demoQuickLogin('SubAdmin', 'subadmin@rku.ac.in', 'SubAdmin@123')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-md font-bold text-[11px] border-none cursor-pointer shrink-0 w-full sm:w-auto">
                             Demo Login
                         </button>
                     </div>
-                    <div class="bg-white/80 rounded-lg p-2.5 flex items-center justify-between gap-2 border border-gray-300">
-                        <div>
+                    <div class="bg-white/80 rounded-lg p-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border border-gray-300">
+                        <div class="min-w-0">
                             <div class="font-bold text-gray-900">Student (Aarav Patel)</div>
-                            <div class="text-gray-600 font-mono text-[11px]">aarav.patel@rku.ac.in / Student@123</div>
+                            <div class="text-gray-600 font-mono text-[11px] break-all">aarav.patel@rku.ac.in / Student@123</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('Student', 'aarav.patel@rku.ac.in', 'Student@123')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md font-bold text-[11px] border-none cursor-pointer shrink-0">
+                        <button type="button" onclick="demoQuickLogin('Student', 'aarav.patel@rku.ac.in', 'Student@123')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md font-bold text-[11px] border-none cursor-pointer shrink-0 w-full sm:w-auto">
                             Demo Login
                         </button>
                     </div>
-                    <div class="bg-white/80 rounded-lg p-2.5 flex items-center justify-between gap-2 border border-gray-300">
-                        <div>
+                    <div class="bg-white/80 rounded-lg p-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border border-gray-300">
+                        <div class="min-w-0">
                             <div class="font-bold text-gray-900">Placed Student (Priya Deshmukh)</div>
-                            <div class="text-gray-600 font-mono text-[11px]">priya.deshmukh@rku.ac.in / Student@123</div>
+                            <div class="text-gray-600 font-mono text-[11px] break-all">priya.deshmukh@rku.ac.in / Student@123</div>
                         </div>
-                        <button type="button" onclick="demoQuickLogin('Student', 'priya.deshmukh@rku.ac.in', 'Student@123')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-md font-bold text-[11px] border-none cursor-pointer shrink-0">
+                        <button type="button" onclick="demoQuickLogin('Student', 'priya.deshmukh@rku.ac.in', 'Student@123')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-md font-bold text-[11px] border-none cursor-pointer shrink-0 w-full sm:w-auto">
                             Demo Login
                         </button>
                     </div>
@@ -616,7 +688,7 @@ function wrapLayout({ title, bodyHtml, scriptsHtml = '', layoutType = 'root' }) 
 
     if (layoutType === 'auth') {
         const authHeader = cleanPaths(readView('Shared/_AuthHeader.cshtml'));
-        const footer = cleanPaths(readView('Shared/_Footer.cshtml'));
+        const footer = makeResponsiveFooter(cleanPaths(readView('Shared/_Footer.cshtml')));
         shellBody = `${authHeader}\n${bodyHtml}\n${footer}`;
     } else if (layoutType === 'admin') {
         const sidebar = renderSidebar('Shared/_AdminSidebar.cshtml');
@@ -624,7 +696,7 @@ function wrapLayout({ title, bodyHtml, scriptsHtml = '', layoutType = 'root' }) 
 <script>requireAuth('Admin');</script>
 <div class="min-h-screen bg-gray-100">
     ${sidebar}
-    <main class="p-4 md:p-8 md:ml-64">
+    <main class="p-4 sm:p-6 md:p-8 md:ml-64 min-w-0 max-w-full overflow-x-hidden">
         ${bodyHtml}
     </main>
 </div>`;
@@ -639,7 +711,7 @@ function wrapLayout({ title, bodyHtml, scriptsHtml = '', layoutType = 'root' }) 
             Profile
         </a>
     </header>
-    <main class="p-4 md:p-8 md:ml-64">
+    <main class="p-4 sm:p-6 md:p-8 md:ml-64 min-w-0 max-w-full overflow-x-hidden">
         ${bodyHtml}
     </main>
 </div>`;
@@ -692,6 +764,8 @@ cleanDir(outDir);
 
 // 1. Copy CSS and Images (explicitly EXCLUDING wwwroot/uploads!)
 copyDirRecursive(path.join(wwwrootDir, 'css'), path.join(outDir, 'css'));
+const responsiveCss = fs.readFileSync(path.join(srcDir, 'responsive.css'), 'utf8');
+fs.appendFileSync(path.join(outDir, 'css', 'site.css'), '\n' + responsiveCss, 'utf8');
 copyDirRecursive(path.join(wwwrootDir, 'images'), path.join(outDir, 'images'));
 
 // 2. Copy demo-seed.js and demo-api.js

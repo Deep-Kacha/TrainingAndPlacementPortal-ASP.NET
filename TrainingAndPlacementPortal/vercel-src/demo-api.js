@@ -1132,8 +1132,8 @@
 
         const role = localStorage.getItem('tp_role') || 'Demo';
         const badge = document.createElement('div');
-        badge.className = 'fixed bottom-3 right-3 z-40 bg-gray-800/90 text-white text-[11px] font-medium px-3 py-1.5 rounded-full shadow-md flex items-center gap-2 pointer-events-none select-none';
-        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> Demo Mode (${role}) • Indian Seed Data • Resets on Logout`;
+        badge.className = 'fixed bottom-2 right-2 sm:bottom-3 sm:right-3 z-40 bg-gray-800/90 text-white text-[10px] sm:text-[11px] font-medium px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-md flex items-center gap-1.5 sm:gap-2 pointer-events-none select-none max-w-[calc(100vw-1rem)] truncate';
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span><span class="truncate">Demo Mode (${role}) • Indian Seed Data • Resets on Logout</span>`;
         document.body.appendChild(badge);
     });
 })();
