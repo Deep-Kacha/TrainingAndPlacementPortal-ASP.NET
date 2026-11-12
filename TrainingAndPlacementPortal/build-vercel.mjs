@@ -638,8 +638,8 @@ function enhanceAdminProfile() {
 }
 
 function enhanceCompanyManagement(html, scripts) {
-    // Clean any stray closing divs after script
-    const cleanedHtml = html.replace(/\s*<\/div>\s*<\/div>\s*$/m, '');
+    // Clean any stray closing divs ONLY at the very end of the file (after @section Scripts)
+    const cleanedHtml = html.trimEnd().replace(/\s*<\/div>\s*<\/div>\s*$/, '');
     // Add OnHold option to status dropdown and delete button support
     const withOnHoldFilter = cleanedHtml.replace(
         '<option value="rejected">Rejected</option>',
@@ -932,7 +932,7 @@ for (const [view, out] of [
             `if (!token || (role !== 'Admin' && role !== 'SubAdmin'))`
         );
     }
-    const cleanedHtml = cleanPaths(html).replace(/\s*<\/div>\s*$/m, (m) => view === 'Admin/PlacementHistory.cshtml' ? '' : m);
+    const cleanedHtml = cleanPaths(html).trimEnd().replace(/\s*<\/div>\s*$/, (m) => view === 'Admin/PlacementHistory.cshtml' ? '' : m);
     writeOut(out, wrapLayout({ title, bodyHtml: cleanedHtml, scriptsHtml: scripts, layoutType: 'admin' }));
 }
 
@@ -957,9 +957,7 @@ for (const [view, out] of [
     const { html, scripts } = extractScriptsSection(stripRazorHeader(raw));
     let cleanedHtml = cleanPaths(html);
     if (view === 'Student/Jobs.cshtml') {
-        cleanedHtml = cleanedHtml.replace(/\s*<\/div>\s*<\/div>\s*$/m, '');
-    } else if (view === 'Student/JobDetails.cshtml') {
-        cleanedHtml = cleanedHtml.replace(/\s*<\/div>\s*$/m, '');
+        cleanedHtml = cleanedHtml.trimEnd().replace(/\s*<\/div>\s*<\/div>\s*$/, '');
     }
     writeOut(out, wrapLayout({ title, bodyHtml: cleanedHtml, scriptsHtml: scripts, layoutType: 'student' }));
 }
