@@ -20,7 +20,7 @@ function cleanDir(dir) {
 }
 
 function readView(relPath) {
-    return fs.readFileSync(path.join(viewsDir, relPath), 'utf8');
+    return fs.readFileSync(path.join(viewsDir, relPath), 'utf8').replace(/\uFEFF/g, '');
 }
 
 function extractTitle(content) {
@@ -671,7 +671,7 @@ ${scriptsHtml}
 function writeOut(relOutPath, content) {
     const dest = path.join(outDir, relOutPath);
     ensureDir(path.dirname(dest));
-    fs.writeFileSync(dest, content, 'utf8');
+    fs.writeFileSync(dest, content.replace(/\uFEFF/g, ''), 'utf8');
 }
 
 function copyDirRecursive(src, dest) {
